@@ -1,0 +1,66 @@
+{
+  "name": "holibob-qa",
+  "version": "1.0.0",
+  "description": "Holibob QA Project",
+  "main": "index.js",
+  "repository": "git@github.com-distributed:distributed-ops/holibob-qa.git",
+  "author": "Distributed",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:vr": "percy exec -- yarn cy:run",
+    "cypress:run:integration": "cypress-tags run --browser chrome -e TAGS='@integration and not @skip'",
+    "cypress:report": "node cucumber-html-report.js",
+    "lint": "eslint --max-warnings 0",
+    "lint:fix": "yarn run lint --fix",
+    "prepare": "husky install .config/husky",
+    "ts:check": "tsc --project tsconfig.json --pretty --noEmit",
+    "test:integration": "cypress:run:integration",
+    "test": "yarn cypress run --spec **/*.feature"
+  },
+  "dependencies": {
+    "cypress-real-events": "^1.5.1",
+    "yarn": "^1.22.17"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.14.7",
+    "@commitlint/cli": "^13.2.1",
+    "@commitlint/config-conventional": "^13.2.0",
+    "@cypress/code-coverage": "^3.9.11",
+    "@percy/cli": "^1.0.0-beta.69",
+    "@percy/cypress": "^3.1.1",
+    "@types/cypress-cucumber-preprocessor": "^4.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "@typescript-eslint/parser": "^4.0.0",
+    "cypress": "^9.0.0",
+    "cypress-cucumber-preprocessor": "^4.3.0",
+    "cypress-dotenv": "^2.0.0",
+    "cypress-iframe": "^1.0.1",
+    "dotenv": "^10.0.0",
+    "eslint": "^7.5.0",
+    "eslint-config-next": "^11.1.2",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-cypress": "^2.12.1",
+    "eslint-plugin-flowtype": "^5.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-testing-library": "^4.12.4",
+    "husky": ">=6",
+    "lint-staged": ">=10",
+    "next": "11.1.2",
+    "prettier": "^2.4.1",
+    "typescript": "4.4.4",
+    "multiple-cucumber-html-reporter": "^1.18.3"
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true,
+    "cucumberJson": {
+      "generate": true,
+      "outputFolder": "cypress/cucumber-json",
+      "filePrefix": "",
+      "fileSuffix": ".cucumber"
+    }
+  }
+}

@@ -1,0 +1,58 @@
+name: Generate and Upload Report
+
+on:
+  workflow_dispatch:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron: '30 11,23 * * *'
+
+jobs:
+  build:
+    env:
+      CYPRESS_BASE_URL: ${{ secrets.CYPRESS_BASE_URL }}
+      CYPRESS_PARTNER_USERNAME: ${{ secrets.CYPRESS_PARTNER_USERNAME }}
+      CYPRESS_PARTNER_PASSWORD: ${{ secrets.CYPRESS_PARTNER_PASSWORD }}
+      CYPRESS_DATA_TEST_ID: ${{ secrets.CYPRESS_DATA_TEST_ID }}
+      CYPRESS_RENDER_PRODUCT_TITLE: ${{ secrets.CYPRESS_RENDER_PRODUCT_TITLE }}
+      CYPRESS_CARD_NUMBER: ${{ secrets.CYPRESS_CARD_NUMBER }}
+      CYPRESS_EXP_DATE: ${{ secrets.CYPRESS_EXP_DATE }}
+      CYPRESS_CVC: ${{ secrets.CYPRESS_CVC }}
+      CYPRESS_POSTAL: ${{ secrets.CYPRESS_POSTAL }}
+      CYPRESS_HUB_API: ${{ secrets.CYPRESS_HUB_API }}
+      CYPRESS_API_KEY: ${{ secrets.CYPRESS_API_KEY }}
+      CYPRESS_API_SECRET: ${{ secrets.CYPRESS_API_SECRET }}
+      CYPRESS_BOOKING_VOUCHER_URL: ${{ secrets.CYPRESS_BOOKING_VOUCHER_URL }}
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Test
+        if: ${{ always() }}
+        run: yarn run test
+
+      - name: Create Report
+        if: ${{ always() }}
+        run: yarn cypress:report
+
+      - name: Upload Report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: Report
+          path: ./reports

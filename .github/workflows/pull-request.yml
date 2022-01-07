@@ -1,0 +1,44 @@
+name: Pull Request
+
+on: [pull_request]
+
+jobs:
+  build:
+    env:
+      CYPRESS_BASE_URL: ${{ secrets.CYPRESS_BASE_URL }}
+      CYPRESS_PARTNER_USERNAME: ${{ secrets.CYPRESS_PARTNER_USERNAME }}
+      CYPRESS_PARTNER_PASSWORD: ${{ secrets.CYPRESS_PARTNER_PASSWORD }}
+      CYPRESS_DATA_TEST_ID: ${{ secrets.CYPRESS_DATA_TEST_ID }}
+      CYPRESS_BOOKING_PRODUCT_TITLE: ${{ secrets.CYPRESS_BOOKING_PRODUCT_TITLE }}
+      CYPRESS_RENDER_PRODUCT_TITLE: ${{ secrets.CYPRESS_RENDER_PRODUCT_TITLE }}
+      CYPRESS_CARD_NUMBER: ${{ secrets.CYPRESS_CARD_NUMBER }}
+      CYPRESS_EXP_DATE: ${{ secrets.CYPRESS_EXP_DATE }}
+      CYPRESS_CVC: ${{ secrets.CYPRESS_CVC }}
+      CYPRESS_POSTAL: ${{ secrets.CYPRESS_POSTAL }}
+      CYPRESS_HUB_API: ${{ secrets.CYPRESS_HUB_API }}
+      CYPRESS_API_KEY: ${{ secrets.CYPRESS_API_KEY }}
+      CYPRESS_API_SE  CRET: ${{ secrets.CYPRESS_API_SECRET }}
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Lint
+        run: |
+            yarn run lint
+            yarn run ts:check

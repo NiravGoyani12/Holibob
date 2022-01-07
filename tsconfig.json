@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.base.json",
+  "include": ["cypress/**/*.ts", "types"],
+  "exclude": ["node_modules"],
+  "types": ["cypress", "cypress-real-events"],
+  "compilerOptions": {
+    "isolatedModules": false
+  }
+}
